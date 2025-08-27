@@ -13,8 +13,6 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private AudioSource boundAudio;
     [SerializeField] private AudioClip buttonAudio;
 
-    [Header("Game Music")]
-    [SerializeField] private AudioClip[] sceneMusic;
 
     private void Awake()
     {
@@ -49,11 +47,5 @@ public class SoundManager : MonoBehaviour
     {
         Audio.clip = buttonAudio;
         Audio.Play();
-    }
-
-    public void SceneMusic(int sceneNumber)
-    {
-        music.clip = sceneMusic[sceneNumber];
-        music.Play();
     }
 }

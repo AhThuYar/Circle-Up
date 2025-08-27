@@ -6,9 +6,9 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     [SerializeField] int score;
-    public TextMeshProUGUI ScoreText;
+    public TextMeshProUGUI ScoreNum;
     [SerializeField] int HighScore;
-    public TextMeshProUGUI HighScoreText;
+    public TextMeshProUGUI HighScoreNum;
     private void Start()
     {
         HighScore = PlayerPrefs.GetInt("highscore");
@@ -16,11 +16,11 @@ public class ScoreManager : MonoBehaviour
     public void GetScore()
     {
         score++;
-        ScoreText.text = score.ToString();
+        ScoreNum.text = score.ToString();
     }
     public void GetHighScore()
     {
-        HighScoreText.text = HighScore.ToString();
+        HighScoreNum.text = HighScore.ToString();
 
         if (score > HighScore)
         {

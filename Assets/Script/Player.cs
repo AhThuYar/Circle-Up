@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     [Header("Player Game Objects")]
     public GameObject PlayerGameObject;
     public GameObject imageGameOver;
-    public GameObject scoreBoard;
+    public GameObject PowerBoard;
     public GameObject pauseButton;
     public GameObject groundFloor;
 
@@ -42,21 +42,34 @@ public class Player : MonoBehaviour
                 return;
             }
 
+            SoundManager.instance.JumpSound();
+
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jump);
             PowerMode();
             Destroy(groundFloor);
         }
 
-        if (transform.position.y < -15f)
+        Camera mainCamera = Camera.main;
+        float cameraBottom = mainCamera.transform.position.y - mainCamera.orthographicSize;
+
+        if (transform.position.y < cameraBottom - 3f) // 1f buffer
         {
-            StartCoroutine(DeadDelayCoroutine());
+            Time.timeScale = 0f;
+            imageGameOver.SetActive(true);
+            Destroy(PlayerGameObject);
         }
+
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Circle"))
         {
             StartCoroutine(DeadDelayCoroutine());
+        }
+
+        if (other.gameObject.CompareTag("Ground"))
+        {
+            FindAnyObjectByType<SoundManager>().BoundSound();
         }
     }
 
@@ -66,6 +79,7 @@ public class Player : MonoBehaviour
         {
             imagePower.fillAmount += 0.1f;
             _score.GetScore();
+            FindAnyObjectByType<SoundManager>().ScoreSound();
         }
         Destroy(collision.gameObject);
         Debug.Log("Collision Destroy");
@@ -76,12 +90,13 @@ public class Player : MonoBehaviour
         Debug.Log("Game Over");
         collider.enabled = false;
         activePlayer = false;
+        FindAnyObjectByType<SoundManager>().GameOverSound();
 
         yield return new WaitForSeconds(2f);
 
         Time.timeScale = 0f;
         imageGameOver.SetActive(true);
-        scoreBoard.SetActive(false);
+        PowerBoard.SetActive(false);
         pauseButton.SetActive(false);
     }
     public void PowerMode()

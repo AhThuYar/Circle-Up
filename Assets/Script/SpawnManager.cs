@@ -6,41 +6,74 @@ public class SpawnManager : MonoBehaviour
 {
     public GameObject[] PlacePrefeb;
     public float YSpawn;
-    public float PlaceLength;
-    public int numberofPlace;
+    public float PlaceLength = 7f;
+    public int numberofPlace = 2;
     public Transform PlayerTransform;
+    public float StartPoint = 10f;
     private static List<GameObject> ActivePlace = new List<GameObject>();
+    private bool firstPlatformSpawned = false;
 
     void Start()
     {
+        if (PlayerTransform == null)
+        {
+            PlayerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        }
+
+        YSpawn = PlayerTransform.position.y + StartPoint;
+        SpawnFirstPlatform();
+
         for (int i = 0; i < numberofPlace; i++)
         {
-            if (i == 0)
-            {
-                SpwanPlace(0);
-            }
-            else
-            {
-                SpwanPlace(Random.Range(0, PlacePrefeb.Length));
-            }
+            SpawnPlatform();
         }
-        PlayerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (PlayerTransform.position.y - 15 > YSpawn - (numberofPlace * PlaceLength))
+        if (PlayerTransform.position.y > YSpawn - (numberofPlace * PlaceLength))
         {
-            SpwanPlace(Random.Range(0, PlacePrefeb.Length));
+            SpawnPlatform();
             DeletePlace();
         }
     }
-    public void SpwanPlace(int PlaceIndex)
+
+    void SpawnFirstPlatform()
     {
-        GameObject Place = Instantiate(PlacePrefeb[PlaceIndex], transform.up * YSpawn, transform.rotation);
-        YSpawn += PlaceLength;
-        ActivePlace.Add(Place);
+        if (PlacePrefeb.Length > 0 && PlacePrefeb[0] != null)
+        {
+            GameObject firstPlatform = Instantiate(PlacePrefeb[0], new Vector3(0, YSpawn, 0), Quaternion.identity);
+            ActivePlace.Add(firstPlatform);
+            YSpawn += GetPlatformHeight(firstPlatform) + PlaceLength;
+            firstPlatformSpawned = true;
+        }
+    }
+
+    void SpawnPlatform()
+    {
+        if (PlacePrefeb.Length <= 1) return;
+
+        int randomIndex = Random.Range(1, PlacePrefeb.Length);
+        GameObject platformPrefab = PlacePrefeb[randomIndex];
+
+        Vector3 spawnPosition = new Vector3(0, YSpawn, 0);
+        GameObject newPlatform = Instantiate(platformPrefab, spawnPosition, Quaternion.identity);
+        ActivePlace.Add(newPlatform);
+
+        YSpawn += GetPlatformHeight(newPlatform) + PlaceLength;
+    }
+
+    float GetPlatformHeight(GameObject platform)
+    {
+        Collider collider = platform.GetComponent<Collider>();
+        if (collider != null) return collider.bounds.size.y;
+
+        Renderer renderer = platform.GetComponent<Renderer>();
+        if (renderer != null) return renderer.bounds.size.y;
+
+        return PlaceLength;
     }
     private void DeletePlace()
     {

@@ -1372,7 +1372,7 @@ Transform:
   m_GameObject: {fileID: 704764249}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 7.1, z: 0}
+  m_LocalPosition: {x: 0, y: 15, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1396,9 +1396,10 @@ MonoBehaviour:
   - {fileID: 68426344701858865, guid: 4e98c979f9d87724188442d265919603, type: 3}
   - {fileID: 68426344701858865, guid: 1c455cfd7eb984d44a6fa352442b4106, type: 3}
   YSpawn: 0
-  PlaceLength: 12
-  numberofPlace: 3
+  PlaceLength: 7
+  numberofPlace: 2
   PlayerTransform: {fileID: 912847767}
+  StartPoint: 10
 --- !u!1 &759373104
 GameObject:
   m_ObjectHideFlags: 0
@@ -1926,7 +1927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bde477e989257f24d9549f7a3bdea5a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jump: 3
+  jump: 3.3
   rb: {fileID: 0}
   collider: {fileID: 0}
   activePlayer: 1

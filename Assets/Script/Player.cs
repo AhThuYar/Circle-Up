@@ -59,6 +59,8 @@ public class Player : MonoBehaviour
             Destroy(PlayerGameObject);
         }
 
+        _score.GetHighScore();
+
     }
     private void OnCollisionEnter2D(Collision2D other)
     {
